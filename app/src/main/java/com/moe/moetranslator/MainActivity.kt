@@ -24,7 +24,6 @@ import android.view.MotionEvent
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.moe.moetranslator.madoka.DialogManager
 
 class MainActivity : BaseActivity() {
 

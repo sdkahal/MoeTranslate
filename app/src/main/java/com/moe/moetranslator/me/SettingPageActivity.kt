@@ -58,9 +58,6 @@ class SettingPageActivity : BaseActivity() {
             TYPE_FRAGMENT_PERSONALIZATION->supportFragmentManager.beginTransaction().replace(binding.fragmentContainerView.id,
                 PersonalizationConfig()
             ).commit()
-            TYPE_FRAGMENT_READ->supportFragmentManager.beginTransaction().replace(binding.fragmentContainerView.id,
-                ReadPage()
-            ).commit()
             TYPE_FRAGMENT_FAQ->supportFragmentManager.beginTransaction().replace(binding.fragmentContainerView.id,
                 FAQPage()
             ).commit()
