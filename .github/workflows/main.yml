@@ -29,7 +29,7 @@ jobs:
       # 如果你没有配置签名，这里会生成 debug 版 APK
       # 如果配置了签名，请将 assembleDebug 改为 assembleRelease
       - name: Build APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleRelease --stacktrace
 
       - name: Get Tag Name
         id: get_tag
