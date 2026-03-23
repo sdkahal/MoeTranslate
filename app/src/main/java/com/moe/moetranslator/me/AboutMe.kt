@@ -88,11 +88,6 @@ class AboutMe : Fragment() {
                 startActivity(intent)
             }
         }
-        binding.readBtn.setOnClickListener {
-            val intent = Intent(requireContext(), SettingPageActivity::class.java)
-            intent.putExtra(SettingPageActivity.EXTRA_FRAGMENT_TYPE, SettingPageActivity.TYPE_FRAGMENT_READ)
-            startActivity(intent)
-        }
         binding.faqBtn.setOnClickListener {
             val intent = Intent(requireContext(), SettingPageActivity::class.java)
             intent.putExtra(SettingPageActivity.EXTRA_FRAGMENT_TYPE, SettingPageActivity.TYPE_FRAGMENT_FAQ)

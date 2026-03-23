@@ -31,9 +31,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) //锁定竖屏
 
-        // 初始化弹窗管理类
-        DialogManager.init(this)
-
         setContentView(R.layout.activity_main)
 
         applySystemBarsPadding(findViewById(R.id.fragment_view), true, false)

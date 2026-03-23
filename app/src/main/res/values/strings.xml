@@ -226,6 +226,8 @@
     <string name="key_value_blank">Key or value is blank</string>
     <string name="url_blank">URL cannot be blank</string>
     <string name="response_json_blank">JSON Response Path cannot be blank</string>
+    <string name="set_floating_ball_press">Set long press judgment time</string>
+    <string name="confirm">Yes</string>
     <string name="ocr">OCR</string>
     <string name="pic">Pic</string>
     <string name="custom">Custom</string>
