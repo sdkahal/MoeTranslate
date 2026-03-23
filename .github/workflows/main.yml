@@ -3,8 +3,8 @@ name: Build & Release APK
 on:
   push:
     tags:
-      - 'v*' # 当推送 v1.0, v5.3.0 等标签时触发
-  workflow_dispatch: # 允许手动触发
+      - 'v*' 
+  workflow_dispatch: # 允许手动触发，方便测试
 
 jobs:
   build:
@@ -26,24 +26,30 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x gradlew
 
-      # 如果你没有配置签名，这里会生成 debug 版 APK
-      # 如果配置了签名，请将 assembleDebug 改为 assembleRelease
+      # 1. 执行 Release 编译
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace
 
-      - name: Get Tag Name
-        id: get_tag
-        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
+      # 2. 修复 Tag 获取逻辑：
+      # 使用 github.ref_name，它在 push tag 时是 v1.0，在手动触发时是 branch 名
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') # 仅在推送标签时创建 Release
         with:
-          tag_name: ${{ steps.get_tag.outputs.TAG }}
-          name: Release ${{ steps.get_tag.outputs.TAG }}
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
-          # 自动寻找并上传生成的 APK 文件
+          # 3. 修复路径：既然跑的是 assembleRelease，路径必须指向 release
           files: |
-            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/release/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 4. 补充：如果是手动触发（没有 Tag），将 APK 作为 Artifact 上传
+      - name: Upload Artifact
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: actions/upload-artifact@v4
+        with:
+          name: MoeTranslate-Release-Unsigned
+          path: app/build/outputs/apk/release/*.apk
