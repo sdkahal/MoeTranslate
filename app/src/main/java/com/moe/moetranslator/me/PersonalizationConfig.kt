@@ -168,19 +168,28 @@ class PersonalizationConfig : PreferenceFragmentCompat() {
         updateFontSizeSummary()
         setupLanguagePreference()
 
-        // --- 新增：悬浮球大小滑动条逻辑 ---
-        val ballSizePicker = findPreference<androidx.preference.SeekBarPreference>("Custom_Floating_Pic_Size")
-        ballSizePicker?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+        // 悬浮球大小实时预览
+        findPreference<androidx.preference.SeekBarPreference>("Custom_Floating_Pic_Size")?.setOnPreferenceChangeListener { _, newValue ->
             val sizeValue = newValue as Int
-            
-            // 1. 保存到 CustomPreference 账本里
             prefs.setInt("Custom_Floating_Pic_Size", sizeValue)
             
-            // 2. 发送广播信号给悬浮球服务 (FloatingService)
             val intent = android.content.Intent("com.moe.moetranslator.ACTION_UPDATE_FLOATING_SIZE")
+            intent.setPackage(requireContext().packageName)
             requireContext().sendBroadcast(intent)
+            true 
+        }
+
+        // 悬浮球透明度滑动条
+        findPreference<androidx.preference.SeekBarPreference>("Floating_Ball_Alpha")?.setOnPreferenceChangeListener { _, newValue ->
+            val alphaValue = newValue as Int
+            // 保存到你的自定义账本
+            prefs.setInt("Floating_Ball_Alpha", alphaValue)
             
-            true // 返回 true 允许界面更新数值显示
+            // 发送透明度更新广播
+            val intent = android.content.Intent("com.moe.moetranslator.ACTION_UPDATE_FLOATING_ALPHA")
+            intent.setPackage(requireContext().packageName)
+            requireContext().sendBroadcast(intent)
+            true
         }
         // ------------------------------
     }

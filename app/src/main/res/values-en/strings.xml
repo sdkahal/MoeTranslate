@@ -200,6 +200,8 @@
     <string name="pic_choose">Select picture（png/jpg）</string>
     <string name="floating_ball_size_title">Floating Ball Size</string>
     <string name="floating_ball_size_summary">Drag to adjust the icon scale of the floating ball</string>
+    <string name="floating_ball_alpha_title">Floating Ball Opacity</string>
+    <string name="floating_ball_alpha_summary">Adjust the transparency of the floating ball</string>
     <string name="default_name">Default</string>
     <string name="current_judgment_time">Current judgment time：%s ms</string>
     <string name="int_only">Enter an integer</string>

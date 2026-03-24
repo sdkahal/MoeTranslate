@@ -44,6 +44,16 @@
             app:showSeekBarValue="true"
             app:iconSpaceReserved="false" />
 
+        <SeekBarPreference
+            android:key="Floating_Ball_Alpha"
+            android:title="@string/floating_ball_alpha_title"
+            android:summary="@string/floating_ball_alpha_summary"
+            android:defaultValue="100"
+            android:max="100"
+            app:min="10"
+            app:showSeekBarValue="true"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

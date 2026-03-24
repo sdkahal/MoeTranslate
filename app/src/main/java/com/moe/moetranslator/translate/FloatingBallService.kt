@@ -189,6 +189,27 @@ class FloatingBallService : LifecycleService() {
         }
     }
 
+    // 1. 定义透明度更新接收器
+    private val alphaUpdateReceiver = object : android.content.BroadcastReceiver() {
+        override fun onReceive(context: android.content.Context?, intent: android.content.Intent?) {
+            if (intent?.action == "com.moe.moetranslator.ACTION_UPDATE_FLOATING_ALPHA") {
+                // 从配置中读取新透明度，默认 100
+                val newAlpha = prefs.getInt("Floating_Ball_Alpha", 100)
+                updateFloatingBallAlpha(newAlpha)
+            }
+        }
+    }
+
+    // 2. 实现更新函数
+    private fun updateFloatingBallAlpha(alphaPercent: Int) {
+        if (::floatingBallView.isInitialized && floatingBallView.isAttachedToWindow) {
+            val alphaFloat = alphaPercent / 100f
+            // 获取图标 ImageView 并设置透明度
+            val icon = floatingBallView.findViewById<ImageView>(R.id.floating_ball_icon)
+            icon?.alpha = alphaFloat
+        }
+    }
+
     @SuppressLint("InflateParams")
     private fun initialize() {
         // 初始化翻译API
@@ -281,6 +302,9 @@ class FloatingBallService : LifecycleService() {
         // 创建悬浮球视图
         floatingBallView = LayoutInflater.from(this).inflate(R.layout.floatball_layout, null)
 
+        val initialAlpha = prefs.getInt("Floating_Ball_Alpha", 100)
+        floatingBallView.findViewById<ImageView>(R.id.floating_ball_icon)?.alpha = initialAlpha / 100f
+
         // 创建翻译结果视图
         floatingTextView = FloatingTextView.translateTextView(this)
 
@@ -319,6 +343,13 @@ class FloatingBallService : LifecycleService() {
             filter,
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
+        val alphaFilter = android.content.IntentFilter("com.moe.moetranslator.ACTION_UPDATE_FLOATING_ALPHA")
+        ContextCompat.registerReceiver(
+            this,
+            alphaUpdateReceiver,
+            alphaFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
 
         // 添加到窗口
         windowManager.addView(floatingBallView, floatingBallParams)
@@ -334,7 +365,6 @@ class FloatingBallService : LifecycleService() {
             width = sizePx
             height = sizePx
             
-            // 注意：这里我建议加一个判断，防止 View 还没创建时报错
             if (::floatingBallView.isInitialized && floatingBallView.isAttachedToWindow) {
                 // 更新内部图标尺寸
                 val icon = floatingBallView.findViewById<android.widget.ImageView>(R.id.floating_ball_icon)
@@ -857,6 +887,7 @@ class FloatingBallService : LifecycleService() {
     override fun onDestroy() {
         try {
             unregisterReceiver(sizeUpdateReceiver)
+            unregisterReceiver(alphaUpdateReceiver)
         } catch (e: Exception) {
             // 预防万一，避免多次解绑报错
         }

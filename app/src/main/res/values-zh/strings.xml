@@ -200,6 +200,8 @@
     <string name="pic_choose">选择图片（png/jpg）</string>
     <string name="floating_ball_size_title">悬浮球图标大小</string>
     <string name="floating_ball_size_summary">滑动调整悬浮球图标的缩放比例</string>
+    <string name="floating_ball_alpha_title">悬浮球透明度</string>
+    <string name="floating_ball_alpha_summary">调节悬浮球在屏幕上的透明程度</string>
     <string name="default_name">默认</string>
     <string name="current_judgment_time">当前判定时间：%s ms</string>
     <string name="int_only">输入整数</string>
