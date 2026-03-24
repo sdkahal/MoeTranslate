@@ -239,7 +239,7 @@ class FloatingBallService : LifecycleService() {
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         val savedSizeDp = prefs.getInt("Custom_Floating_Pic_Size", 120)
-        val sizePx = UtilTools.dp2px(this, savedSizeDp.toFloat())
+        val sizePx = UtilTools.dp2px(savedSizeDp.toFloat())
 
         // 创建悬浮窗参数
         floatingBallParams = WindowManager.LayoutParams().apply {
@@ -322,7 +322,7 @@ class FloatingBallService : LifecycleService() {
     }
 
     private fun updateFloatingBallSize(sizeDp: Int) {
-        val sizePx = UtilTools.dp2px(this, sizeDp.toFloat())
+        val sizePx = UtilTools.dp2px(sizeDp.toFloat())
         
         floatingBallParams?.apply {
             width = sizePx
