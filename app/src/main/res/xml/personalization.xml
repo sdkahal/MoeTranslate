@@ -35,12 +35,12 @@
             android:title="@string/floating_ball_press_title" />
 
         <SeekBarPreference
-            app:key="Custom_Floating_Pic_Size"
-            app:title="@string/floating_ball_size_title"
-            app:summary="@string/floating_ball_size_summary"
-            app:defaultValue="100"
+            android:key="Custom_Floating_Pic_Size"
+            android:title="@string/floating_ball_size_title"
+            android:summary="@string/floating_ball_size_summary"
+            android:defaultValue="100"
+            android:max="200"
             app:min="50"
-            app:max="200"
             app:showSeekBarValue="true" />
 
     </PreferenceCategory>
