@@ -198,6 +198,8 @@
     <string name="ball_setting">悬浮球图标</string>
     <string name="ball_icon_default">恢复默认</string>
     <string name="pic_choose">选择图片（png/jpg）</string>
+    <string name="floating_ball_size_title">悬浮球图标大小</string>
+    <string name="floating_ball_size_summary">滑动调整悬浮球图标的缩放比例</string>
     <string name="default_name">默认</string>
     <string name="current_judgment_time">当前判定时间：%s ms</string>
     <string name="int_only">输入整数</string>

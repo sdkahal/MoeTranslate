@@ -34,6 +34,15 @@
             app:iconSpaceReserved="false"
             android:title="@string/floating_ball_press_title" />
 
+        <SeekBarPreference
+            app:key="Custom_Floating_Pic_Size"
+            app:title="@string/floating_ball_size_title"
+            app:summary="@string/floating_ball_size_summary"
+            app:defaultValue="100"
+            app:min="50"
+            app:max="200"
+            app:showSeekBarValue="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

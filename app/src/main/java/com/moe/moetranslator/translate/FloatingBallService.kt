@@ -177,6 +177,17 @@ class FloatingBallService : LifecycleService() {
         setupScreenshotCollector()
     }
 
+    // 在类中定义接收器
+    private val sizeUpdateReceiver = object : android.content.BroadcastReceiver() {
+        override fun onReceive(context: android.content.Context?, intent: android.content.Intent?) {
+            if (intent?.action == "com.moe.moetranslator.ACTION_UPDATE_FLOATING_SIZE") {
+                // 收到信号后，执行更新逻辑
+                val newSize = prefs.getInt("Custom_Floating_Pic_Size", 120) // 120是默认值
+                updateFloatingBallSize(newSize)
+            }
+        }
+    }
+
     @SuppressLint("InflateParams")
     private fun initialize() {
         // 初始化翻译API
@@ -227,13 +238,16 @@ class FloatingBallService : LifecycleService() {
 
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
+        val savedSizeDp = prefs.getInt("Custom_Floating_Pic_Size", 120)
+        val sizePx = UtilTools.dp2px(this, savedSizeDp.toFloat())
+
         // 创建悬浮窗参数
         floatingBallParams = WindowManager.LayoutParams().apply {
             type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             format = PixelFormat.RGBA_8888
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-            width = WindowManager.LayoutParams.WRAP_CONTENT
-            height = WindowManager.LayoutParams.WRAP_CONTENT
+            width = sizePx
+            height = sizePx
             gravity = Gravity.START or Gravity.TOP
             x = floatingBallConfig.floatingBallInitialX
             y = floatingBallConfig.floatingBallInitialY
@@ -297,11 +311,34 @@ class FloatingBallService : LifecycleService() {
         // 设置长按判定时间
         floatingBallConfig.LONG_PRESS_DELAY = prefs.getLong("Custom_Long_Press_Delay", 500L)
 
+        val filter = android.content.IntentFilter("com.moe.moetranslator.ACTION_UPDATE_FLOATING_SIZE")
+        registerReceiver(sizeUpdateReceiver, filter)
+
         // 添加到窗口
         windowManager.addView(floatingBallView, floatingBallParams)
 
         // 设置点击接收器
         setupTouchListener()
+    }
+
+    private fun updateFloatingBallSize(sizeDp: Int) {
+        val sizePx = UtilTools.dp2px(this, sizeDp.toFloat())
+        
+        floatingBallParams?.apply {
+            width = sizePx
+            height = sizePx
+            
+            // 注意：这里我建议加一个判断，防止 View 还没创建时报错
+            if (::floatingBallView.isInitialized && floatingBallView.isAttachedToWindow) {
+                // 更新内部图标尺寸
+                val icon = floatingBallView.findViewById<android.widget.ImageView>(R.id.floating_ball_icon)
+                icon.layoutParams.width = sizePx
+                icon.layoutParams.height = sizePx
+                
+                // 核心：通知系统刷新悬浮窗
+                windowManager.updateViewLayout(floatingBallView, this)
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -812,7 +849,11 @@ class FloatingBallService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        try {
+            unregisterReceiver(sizeUpdateReceiver)
+        } catch (e: Exception) {
+            // 预防万一，避免多次解绑报错
+        }
 
         // 停止自动翻译
         if (isAutoTranslating) {
@@ -836,5 +877,7 @@ class FloatingBallService : LifecycleService() {
         translatorPic?.release()
         handler.removeCallbacks(longPressRunnable)
         lifecycleScope.cancel()
+
+        super.onDestroy()
     }
 }

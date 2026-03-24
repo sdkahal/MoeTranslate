@@ -113,6 +113,7 @@ class CustomPreference private constructor(context: Context) {
     //Custom_Show_Source_Mode(Int)：显示原文模式
     //Custom_Long_Press_Delay(Long)：长按判定时间
     //Custom_Floating_Pic(Str)：用户自定义的悬浮球图片
+    //Custom_Floating_Pic_Size(Int)：用户自定义的悬浮球图标大小（单位：百分比，默认100）
     //Custom_Adjust_Not_Text(Boolean)：是否显示提示文本
 
     //----自动翻译选项----
@@ -204,5 +205,13 @@ class CustomPreference private constructor(context: Context) {
 
     fun contains(key: String): Boolean {
         return prefs.contains(key)
+    }
+
+    fun setFloatingSize(value: Int) {
+        setInt("Custom_Floating_Pic_Size", value)
+    }
+
+    fun getFloatingSize(): Int {
+        return getInt("Custom_Floating_Pic_Size", 100)
     }
 }
