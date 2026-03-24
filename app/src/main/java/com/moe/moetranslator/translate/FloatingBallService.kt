@@ -62,6 +62,7 @@ import translationapi.volctranslation.VolcTranslation
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
+import androidx.core.content.ContextCompat
 
 // 发送服务停止广播
 object BroadcastAction {
@@ -312,7 +313,12 @@ class FloatingBallService : LifecycleService() {
         floatingBallConfig.LONG_PRESS_DELAY = prefs.getLong("Custom_Long_Press_Delay", 500L)
 
         val filter = android.content.IntentFilter("com.moe.moetranslator.ACTION_UPDATE_FLOATING_SIZE")
-        registerReceiver(sizeUpdateReceiver, filter)
+        ContextCompat.registerReceiver(
+            this,
+            sizeUpdateReceiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
 
         // 添加到窗口
         windowManager.addView(floatingBallView, floatingBallParams)
