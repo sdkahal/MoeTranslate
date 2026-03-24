@@ -41,7 +41,8 @@
             android:defaultValue="100"
             android:max="200"
             app:min="50"
-            app:showSeekBarValue="true" />
+            app:showSeekBarValue="true"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
