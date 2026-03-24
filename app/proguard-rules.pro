@@ -1,21 +1,13 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# 保持数据模型类不被混淆（假设包名如下，请根据实际修改）
+-keep class com.moe.moetranslator.CustomLocale { *; }
+-keep class com.moe.moetranslator.translate.** { *; }
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# 保持所有资源 ID 不变（防止找不到 R.raw.xxx）
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# 保持 XML 解析库不被破坏
+-keepattributes Signature,EnclosingMethod,InnerClasses
+-keep class javax.xml.** { *; }
+-keep class org.w3c.dom.** { *; }
